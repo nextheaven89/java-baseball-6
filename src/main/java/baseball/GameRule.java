@@ -1,12 +1,12 @@
 package baseball;
 
-public class GameRull {
+public class GameRule {
 
-    Computer computer;
-    Player player;
-    Referee referee;
+    private final Computer computer;
+    private final Player player;
+    private final Referee referee;
 
-    GameRull() {
+    public GameRule() {
         this.computer = new Computer();
         this.player = new Player();
         this.referee = new Referee();
@@ -21,10 +21,17 @@ public class GameRull {
                 break;
             }
         }
+
         System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
-        String input = player.input();
-        if (input.equals("1")) GameStart();
-        if (input.equals("2")) return;
+        switch (player.input()) {
+            case "1":
+                GameStart();
+                break;
+            case "2":
+                return;
+            default:
+                throw new Error("잘못된 값을 입력하셨습니다.");
+        }
     }
 
     public String startMent() {
@@ -32,9 +39,7 @@ public class GameRull {
     }
 
     public boolean inputData(String computerCreateRandNum) {
-        System.out.println(computerCreateRandNum);
         System.out.print("숫자를 입력해주세요 : ");
-        String answer = player.input();
-        return referee.checkInput(computerCreateRandNum, answer);
+        return referee.checkInput(computerCreateRandNum, player.input());
     }
 }
