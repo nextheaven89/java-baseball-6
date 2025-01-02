@@ -1,5 +1,7 @@
 package baseball;
 
+import camp.nextstep.edu.missionutils.Console;
+
 public class GameRule {
 
     private final Computer computer;
@@ -12,20 +14,28 @@ public class GameRule {
         this.referee = new Referee();
     }
 
-    public void GameStart() {
+    public void gameStart() {
         System.out.println("숫자 야구 게임을 시작합니다.");
-        String computerCreateRandNum = startMent();
+        playGame(getComputerRandNum());
+        retryGameSelectAndShowWinCount();
+    }
+
+    public void playGame(String computerCreateRandNum) {
         while (true) {
-            if (inputData(computerCreateRandNum)) {
+            if (inputUserNumber(computerCreateRandNum)) {
                 System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
+                player.addWinCount();
                 break;
             }
         }
+    }
 
+    public void retryGameSelectAndShowWinCount() {
+        player.showWinCountAndClearInputData();
         System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
-        switch (player.input()) {
+        switch (Console.readLine()) {
             case "1":
-                GameStart();
+                gameStart();
                 break;
             case "2":
                 return;
@@ -34,12 +44,12 @@ public class GameRule {
         }
     }
 
-    public String startMent() {
+    public String getComputerRandNum() {
         return computer.randomNumberCreate();
     }
 
-    public boolean inputData(String computerCreateRandNum) {
-        System.out.print("숫자를 입력해주세요 : ");
-        return referee.checkInput(computerCreateRandNum, player.input());
+    public boolean inputUserNumber(String computerCreateRandNum) {
+        player.showTryList();
+        return referee.checkInput(computerCreateRandNum, player.inputUserNumber());
     }
 }
